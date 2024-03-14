@@ -14,7 +14,7 @@ def index():
 
 @app.route('/sheet/<sheet_name>')
 def sheet(sheet_name):
-    viewed_questions = request.cookies.get('viewed_questions').split(',')
+    viewed_questions = request.cookies.get(sheet_name).split(',')
     data = pd.read_excel('_100 вопросов мастеру.xlsx', sheet_name=sheet_name)
     data = data[~data['ФИО'].isin(viewed_questions)]
     count_question = len(data)
@@ -27,7 +27,7 @@ def sheet(sheet_name):
                                          place=place, question=question, count_question=count_question))
     viewed_questions = ','.join(viewed_questions)
     viewed_questions = f"{viewed_questions},{fio}"
-    resp.set_cookie('viewed_questions', viewed_questions)
+    resp.set_cookie(sheet_name, viewed_questions)
     return resp
 
 
